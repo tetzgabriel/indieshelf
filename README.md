@@ -1,101 +1,174 @@
-# indieshelf
+<h1 align="center">🗂️ indieshelf</h1>
 
-A tiny drag-and-drop shelf that lives in your Mac's menu bar. Start dragging some files, **shake the cursor**,
-and the shelf drops down. Put the files on it, go wherever you need to go, and drag them back out. They stay on
-the shelf until you remove them, and the menu bar icon shows how many are there.
+<p align="center">
+  <em>a tiny drag-and-drop shelf that lives in your Mac's menu bar.<br>
+  shake. drop. go do your thing. come back for it later.</em>
+</p>
 
-- One Swift file, AppKit only. No dependencies, no Xcode project.
-- Under 500 KB, one binary for Apple Silicon and Intel. Lives in the menu bar, no Dock icon.
-- Default macOS look. No settings, no accounts, no network.
+<p align="center">
+  <a href="https://github.com/tetzgabriel/indieshelf/releases/latest"><b>⬇ download for Mac</b></a>
+  &nbsp;·&nbsp;
+  <a href="#build-it-yourself">build it yourself</a>
+  &nbsp;·&nbsp;
+  <a href="https://meoriente.com.br/indiethings/">part of indiethings</a>
+  &nbsp;·&nbsp;
+  MIT, free forever
+</p>
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/hero-dark.png">
+    <img src="docs/hero-light.png" width="720" alt="The indieshelf menu bar icon with a small tag that says 4, and the shelf hanging below it listing a PDF, a screenshot, a folder and a notes file.">
+  </picture>
+</p>
+
+---
+
+## The trick
+
+You know the dance. You're dragging a file and the folder you want is buried under six windows, or sits on
+another desktop, or is somewhere you haven't even opened yet. So you let go, juggle windows, and start over.
+
+**Don't let go. Shake it.**
+
+```
+   1. grab some files          2. shake the cursor          3. a shelf drops down
+                                                            ┌─────────────────┐
+      ▤ ▤ ───▶ ↖                  ↖ ↗ ↖ ↗ ↖ ↗               │ ▤ report.pdf    │
+                                (like you mean it)          │ ▤ photo.jpg     │
+                                                            └─────────────────┘
+   4. drop them on it.   5. go wherever you need.   6. drag them back out. done.
+```
+
+The files wait on the shelf, in your menu bar, for as long as you like. A little tag on the icon tells you how
+many are there:
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/tags-dark.png">
+    <img src="docs/tags-light.png" width="360" alt="The menu bar icon: empty, then with tags reading 1, 4, 12 and 99+.">
+  </picture>
+</p>
+
+## What it does
+
+- [x] **Shake to open.** Drag files, wiggle the cursor, and the shelf appears. No hotkey to remember.
+- [x] **Lives in the menu bar.** Click the tray icon any time to see what's on the shelf.
+- [x] **Keeps things until you say so.** Through restarts too. Removing an item never touches the file itself.
+- [x] **Follows your files.** Moved or renamed one? The shelf still knows where it is. Put one in the Trash and
+      it quietly leaves the shelf.
+- [x] **Doesn't panic about unplugged drives.** Files on an external disk hide while it's away and come back when
+      you plug it in.
+- [x] **Plays nice with full screen and Mission Control.** No menu bar in sight? The shelf opens right at your
+      cursor instead.
+- [x] **Looks like it came with your Mac.** Default macOS look, light and dark mode. No themes, no settings, no
+      onboarding.
+
+## Lighter than a photo of your cat
+
+The [indiethings](https://meoriente.com.br/indiethings/) rule is "if it's heavier than a photo of your cat, it's
+too heavy". Measured on a real Mac:
+
+| | |
+|---|---|
+| 📦 app size | **360 KB** (the download is 108 KB) |
+| 🧠 memory at rest | **about 10 MB** |
+| 🔋 CPU at rest | **0.0%**. It only watches the mouse while you hold a button down |
+| 📄 code | **one Swift file**, about 650 lines, AppKit only |
+| 🧩 dependencies | **zero** |
+| 📡 network | **none**. No update checker, no analytics, no "telemetry". Read the source, it's one file |
+| 💻 runs on | Apple Silicon and Intel, macOS 14 Sonoma or newer |
 
 ## Install
 
-indieshelf needs **macOS 14 (Sonoma) or newer**, on Apple Silicon or Intel.
+### Download it
 
-### Option 1: build it yourself (recommended)
+1. Grab **`indieshelf.zip`** from the [latest release](https://github.com/tetzgabriel/indieshelf/releases/latest)
+   and double-click to unzip.
+2. Drag **`indieshelf.app`** into **Applications** and open it.
+3. macOS will say it **"could not verify"** the app. That's expected: indieshelf is free and isn't part of Apple's
+   paid developer program, so Apple has never looked at it. Click **Done**.
+4. Open **System Settings → Privacy & Security**, scroll down to the line about indieshelf, and click
+   **Open Anyway**. You only do this once.
 
-This takes about a minute, and macOS won't complain about an app you built yourself.
+A tray icon shows up in your menu bar. That's it, you're in.
 
-1. Install Apple's command line tools if you don't have them (it's free, and nothing else is needed):
-   ```sh
-   xcode-select --install
-   ```
-2. Get the code and build it:
-   ```sh
-   git clone https://github.com/tetzgabriel/indieshelf.git
-   cd indieshelf
-   ./build.sh
-   ```
-3. Move it to Applications and open it:
-   ```sh
-   mv indieshelf.app /Applications/
-   open /Applications/indieshelf.app
-   ```
+### Build it yourself
 
-A tray icon appears in the menu bar. That's indieshelf.
+Don't trust a random download? Good instinct. Read [`main.swift`](main.swift), then build it in about a
+minute, with nothing but Apple's free command line tools:
 
-### Option 2: download the app
+```sh
+xcode-select --install          # skip if you already have them
+git clone https://github.com/tetzgabriel/indieshelf.git
+cd indieshelf
+./build.sh                      # makes indieshelf.app, for Apple Silicon and Intel
+mv indieshelf.app /Applications/ && open /Applications/indieshelf.app
+```
 
-1. Download `indieshelf.zip` from the [Releases page](https://github.com/tetzgabriel/indieshelf/releases) and double-click it to unzip.
-2. Drag `indieshelf.app` into your **Applications** folder.
-3. Open it. macOS will say it **"cannot be opened"** or **"could not verify"** it. That's expected: indieshelf is free
-   and isn't registered with Apple's paid developer program, so Apple has never checked it. Click **Done**.
-4. Go to **System Settings → Privacy & Security**, scroll down to the message about indieshelf, and click
-   **Open Anyway**. Confirm with your password.
+macOS doesn't complain about apps you built yourself.
 
-You only do this once. If you'd rather not trust a downloaded app, use Option 1: you can read every line
-in [`main.swift`](main.swift) before building it.
+**Start at login:** System Settings → General → Login Items → **+** → indieshelf.
 
-### Start it at login
+## Cheat sheet
 
-**System Settings → General → Login Items → +**, then pick indieshelf from Applications.
+| you | indieshelf |
+|---|---|
+| drag files and shake | opens the shelf (at your cursor if the menu bar is hidden) |
+| drop files on the shelf, or on the tray icon | keeps them |
+| click the tray icon | shows the shelf |
+| drag files out of the list | hands them over, like a normal Finder drag (⌥ to copy) |
+| drag the big icon at the top | hands over **everything** at once |
+| double-click a file | opens it |
+| right-click | Open, Show in Finder, Remove from Shelf |
+| select + Delete | removes it from the shelf (the file stays put) |
+| Clear All | empties the shelf and closes it |
+| Esc, or click anywhere else | closes the shelf |
 
-### Uninstall
+## How it works, for the curious
 
-Click the tray icon, click **Quit**, and drag `indieshelf.app` to the Trash. The only other trace is a small
-preferences file at `~/Library/Preferences/io.github.tetzgabriel.indieshelf.plist`, which holds the list of what's on
-your shelf. Delete it too if you want a clean slate.
+- **The shake** is plain geometry: while you hold the mouse button, indieshelf checks the cursor 60 times a
+  second and counts quick left-right reversals. Three of them within 0.7 s while dragging files is a shake.
+  Dragging text or a link is ignored. No Accessibility permission needed.
+- **The memory** of what's on your shelf is a list of macOS *bookmarks*: small references that keep finding a file
+  after it's moved or renamed. Nothing is ever copied.
+- **The shelf** is a standard macOS popover. It hangs from an invisible point under the icon (or at your cursor),
+  so it stays put even when a full-screen app hides the menu bar mid-animation.
 
-## Use
-
-The shelf lives behind the **tray icon** in the menu bar. The little tag on it shows how many items are there.
-
-- **Put files on it:** start dragging files and shake the cursor, and the shelf drops down; drop them on it. Or drop
-  them straight onto the tray icon. Or click the icon and drop them in the window.
-- **Take files off:** drag them out of the list, one or several at a time. Drag the big icon at the top to take
-  everything at once. It works like a normal Finder drag: move on the same disk, copy to another one, hold ⌥ to
-  copy.
-- **They stay** until you remove them, even after a restart. If a file gets moved or renamed, the shelf follows
-  it. Files that end up in the Trash disappear from the shelf.
-- **Remove from Shelf** (right-click, or select and press Delete) and **Clear All** only take items off the
-  shelf. Clear All also closes it. Your files are never deleted, copied or changed: the shelf only remembers where they are.
-- Double-click to open a file. Right-click for **Show in Finder**. Esc or a click anywhere else closes the shelf.
-- In full-screen apps and Mission Control, where the menu bar is hidden, a shake opens the shelf right at the
-  cursor instead.
-
-## If the shake doesn't work
+## Shake not working?
 
 Run it from Terminal with logging on:
 
 ```sh
-INDIESHELF_DEBUG=1 ./indieshelf.app/Contents/MacOS/indieshelf
+INDIESHELF_DEBUG=1 /Applications/indieshelf.app/Contents/MacOS/indieshelf
 ```
 
-Drag a file and shake. You should see `reversal 1`, `reversal 2`, … then `shake`. If you see
-`shake ignored: not dragging files`, the shake was fine but macOS didn't report a file drag (dragging text or
-a link is deliberately ignored). The thresholds
-are at the top of `ShakeDetector` in `main.swift`.
+Drag a file and shake. You should see `reversal 1`, `reversal 2`, … and then `shake`. If you get
+`shake ignored: not dragging files`, the shake was fine but macOS didn't report a file drag. If it's just not
+sensitive enough for your taste, the thresholds are the first three lines of `ShakeDetector` in
+[`main.swift`](main.swift).
+
+## Uninstall
+
+Quit it (tray icon → **Quit**) and drag `indieshelf.app` to the Trash. The only other trace is
+`~/Library/Preferences/io.github.tetzgabriel.indieshelf.plist`, the list of what was on your shelf. Delete it too
+for a clean slate.
 
 ## Making a release
 
 ```sh
 ./build.sh
-ditto -c -k --keepParent indieshelf.app indieshelf.zip
+ditto -c -k --keepParent indieshelf.app indieshelf.zip   # keeps the app's signature intact
 ```
 
-Upload `indieshelf.zip` to a new GitHub release. (`ditto` keeps the app's signature intact; Finder's
-"Compress" works too.)
+Then attach `indieshelf.zip` to a new [GitHub release](https://github.com/tetzgabriel/indieshelf/releases/new).
 
-## License
+---
 
-MIT
+<p align="center">
+  <sub>
+    part of <a href="https://meoriente.com.br/indiethings/"><b>indiethings</b></a>, a notebook of small, free, weird stuff.<br>
+    no ads. no tracking. no accounts. just things.<br>
+    MIT licensed. take it, fork it, make it weirder.
+  </sub>
+</p>
