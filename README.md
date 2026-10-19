@@ -71,10 +71,10 @@ too heavy". Measured on a real Mac:
 
 | | |
 |---|---|
-| 📦 app size | **360 KB** (the download is 108 KB) |
+| 📦 app size | **770 KB**, and half of that is the icon (the download is 460 KB) |
 | 🧠 memory at rest | **about 10 MB** |
 | 🔋 CPU at rest | **0.0%**. It only watches the mouse while you hold a button down |
-| 📄 code | **one Swift file**, about 650 lines, AppKit only |
+| 📄 code | **one Swift file**, about 670 lines, AppKit only (plus a tiny one that draws the icon) |
 | 🧩 dependencies | **zero** |
 | 📡 network | **none**. No update checker, no analytics, no "telemetry". Read the source, it's one file |
 | 💻 runs on | Apple Silicon and Intel, macOS 14 Sonoma or newer |
@@ -90,6 +90,13 @@ too heavy". Measured on a real Mac:
    paid developer program, so Apple has never looked at it. Click **Done**.
 4. Open **System Settings → Privacy & Security**, scroll down to the line about indieshelf, and click
    **Open Anyway**. You only do this once.
+
+Terminal person? Steps 3 and 4 are this one line. It removes the "downloaded from the internet" mark that
+triggers the warning:
+
+```sh
+xattr -dr com.apple.quarantine /Applications/indieshelf.app
+```
 
 A tray icon shows up in your menu bar. That's it, you're in.
 
@@ -120,8 +127,9 @@ macOS doesn't complain about apps you built yourself.
 | drag files out of the list | hands them over, like a normal Finder drag (⌥ to copy) |
 | drag the big icon at the top | hands over **everything** at once |
 | double-click a file | opens it |
+| click the ⓧ next to a file | takes it off the shelf (the file stays put) |
 | right-click | Open, Show in Finder, Remove from Shelf |
-| select + Delete | removes it from the shelf (the file stays put) |
+| select + Delete | takes the selected files off the shelf |
 | Clear All | empties the shelf and closes it |
 | Esc, or click anywhere else | closes the shelf |
 

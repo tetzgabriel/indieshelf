@@ -333,7 +333,10 @@ final class ShelfController: NSViewController, NSTableViewDataSource, NSTableVie
     required init?(coder: NSCoder) { fatalError() }
 
     override func loadView() {
-        table.addTableColumn(NSTableColumn(identifier: .init("file")))
+        let column = NSTableColumn(identifier: .init("file"))
+        column.resizingMask = .autoresizingMask  // the one column always spans the whole list
+        table.addTableColumn(column)
+        table.columnAutoresizingStyle = .uniformColumnAutoresizingStyle
         table.headerView = nil
         table.backgroundColor = .clear
         table.allowsMultipleSelection = true
@@ -416,6 +419,12 @@ final class ShelfController: NSViewController, NSTableViewDataSource, NSTableVie
 
     @objc private func remove() { store.remove(targetRows) }
 
+    /// The × on a row: removes just that row (cells are reused, so ask the table which row it's in now).
+    @objc private func removeRow(_ sender: NSButton) {
+        let row = table.row(for: sender)
+        if row >= 0 { store.remove([row]) }
+    }
+
     @objc private func clearAll() {
         store.clear()
         onClose()
@@ -440,7 +449,16 @@ final class ShelfController: NSViewController, NSTableViewDataSource, NSTableVie
         let image = NSImageView()
         let text = NSTextField(labelWithString: "")
         text.lineBreakMode = .byTruncatingMiddle
-        for part in [image, text] as [NSView] {
+        let remove = NSButton(image: NSImage(systemSymbolName: "xmark.circle.fill", accessibilityDescription: "Remove from Shelf")!,
+                              target: self, action: #selector(removeRow(_:)))
+        remove.isBordered = false
+        remove.contentTintColor = .tertiaryLabelColor
+        remove.toolTip = "Remove from Shelf"
+        // The name takes whatever room is left and truncates, so the × always sits at the right edge.
+        text.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        text.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        remove.setContentCompressionResistancePriority(.required, for: .horizontal)
+        for part in [image, text, remove] as [NSView] {
             part.translatesAutoresizingMaskIntoConstraints = false
             cell.addSubview(part)
         }
@@ -450,8 +468,10 @@ final class ShelfController: NSViewController, NSTableViewDataSource, NSTableVie
             image.widthAnchor.constraint(equalToConstant: 18),
             image.heightAnchor.constraint(equalToConstant: 18),
             text.leadingAnchor.constraint(equalTo: image.trailingAnchor, constant: 6),
-            text.trailingAnchor.constraint(equalTo: cell.trailingAnchor, constant: -2),
+            text.trailingAnchor.constraint(equalTo: remove.leadingAnchor, constant: -4),
             text.centerYAnchor.constraint(equalTo: cell.centerYAnchor),
+            remove.trailingAnchor.constraint(equalTo: cell.trailingAnchor, constant: -2),
+            remove.centerYAnchor.constraint(equalTo: cell.centerYAnchor),
         ])
         cell.imageView = image
         cell.textField = text
