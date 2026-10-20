@@ -81,24 +81,35 @@ too heavy". Measured on a real Mac:
 
 ## Install
 
-### Download it
+### The quick way: one line in Terminal
+
+Open **Terminal**, paste this, press Return:
+
+```sh
+curl -fsSL https://github.com/tetzgabriel/indieshelf/releases/latest/download/indieshelf.zip -o /tmp/indieshelf.zip && ditto -xk /tmp/indieshelf.zip /Applications && open /Applications/indieshelf.app
+```
+
+It downloads the latest release, puts `indieshelf.app` in **Applications** and opens it. A tray icon shows up in
+your menu bar. That's it, you're in. Run the same line again any time to update (quit indieshelf first).
+
+> **Why Terminal?** When a *browser* downloads an app, macOS marks it "from the internet" and refuses to open it
+> unless the developer pays Apple $99 a year to sign it. indieshelf is free, so it isn't. `curl` doesn't add that
+> mark, so there's nothing to click through.
+
+### The clicky way: download it
 
 1. Grab **`indieshelf.zip`** from the [latest release](https://github.com/tetzgabriel/indieshelf/releases/latest)
    and double-click to unzip.
 2. Drag **`indieshelf.app`** into **Applications** and open it.
-3. macOS will say it **"could not verify"** the app. That's expected: indieshelf is free and isn't part of Apple's
-   paid developer program, so Apple has never looked at it. Click **Done**.
+3. macOS will say it **"could not verify"** the app. That's the mark from above. Click **Done**.
 4. Open **System Settings → Privacy & Security**, scroll down to the line about indieshelf, and click
    **Open Anyway**. You only do this once.
 
-Terminal person? Steps 3 and 4 are this one line. It removes the "downloaded from the internet" mark that
-triggers the warning:
+Already downloaded it and got the warning? This removes the mark:
 
 ```sh
 xattr -dr com.apple.quarantine /Applications/indieshelf.app
 ```
-
-A tray icon shows up in your menu bar. That's it, you're in.
 
 ### Build it yourself
 
