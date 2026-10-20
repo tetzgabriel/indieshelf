@@ -4,6 +4,7 @@
 // One file, AppKit only. Build with ./build.sh
 
 import AppKit
+import ServiceManagement
 
 let log = ProcessInfo.processInfo.environment["INDIESHELF_DEBUG"] != nil
 
@@ -322,6 +323,7 @@ final class ShelfController: NSViewController, NSTableViewDataSource, NSTableVie
     private let store: Store
     private let header: AllItemsView
     private let table = ShelfTable()
+    private let login = NSButton(checkboxWithTitle: "", target: nil, action: nil)
     var onClose: () -> Void = {}
 
     init(store: Store) {
@@ -365,6 +367,13 @@ final class ShelfController: NSViewController, NSTableViewDataSource, NSTableVie
 
         let footer = NSStackView()
         footer.addView(NSButton(title: "Clear All", target: self, action: #selector(clearAll)), in: .leading)
+        // Open at Login: small and gray, so it's there when you want it and quiet otherwise.
+        login.attributedTitle = NSAttributedString(string: "Open at Login", attributes: [
+            .font: NSFont.systemFont(ofSize: NSFont.smallSystemFontSize), .foregroundColor: NSColor.secondaryLabelColor])
+        login.controlSize = .small
+        login.target = self
+        login.action = #selector(toggleLogin)
+        footer.addView(login, in: .center)
         footer.addView(NSButton(title: "Quit", target: NSApp, action: #selector(NSApplication.terminate(_:))), in: .trailing)
 
         let view = NSView()
@@ -387,6 +396,12 @@ final class ShelfController: NSViewController, NSTableViewDataSource, NSTableVie
         ])
         self.view = view
         reload()
+    }
+
+    // Read it every time the shelf opens: it can also be changed in System Settings.
+    override func viewWillAppear() {
+        super.viewWillAppear()
+        login.state = SMAppService.mainApp.status == .enabled ? .on : .off
     }
 
     func reload() {
@@ -423,6 +438,17 @@ final class ShelfController: NSViewController, NSTableViewDataSource, NSTableVie
     @objc private func removeRow(_ sender: NSButton) {
         let row = table.row(for: sender)
         if row >= 0 { store.remove([row]) }
+    }
+
+    @objc private func toggleLogin() {
+        let app = SMAppService.mainApp
+        do {
+            if login.state == .on { try app.register() } else { try app.unregister() }
+        } catch {
+            debug("open at login: \(error.localizedDescription)")
+        }
+        if app.status == .requiresApproval { SMAppService.openSystemSettingsLoginItems() }
+        login.state = app.status == .enabled ? .on : .off
     }
 
     @objc private func clearAll() {

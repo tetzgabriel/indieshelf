@@ -71,10 +71,10 @@ too heavy". Measured on a real Mac:
 
 | | |
 |---|---|
-| 📦 app size | **770 KB**, and half of that is the icon (the download is 460 KB) |
+| 📦 app size | **780 KB**, and half of that is the icon (the download is 470 KB) |
 | 🧠 memory at rest | **about 10 MB** |
 | 🔋 CPU at rest | **0.0%**. It only watches the mouse while you hold a button down |
-| 📄 code | **one Swift file**, about 670 lines, AppKit only (plus a tiny one that draws the icon) |
+| 📄 code | **one Swift file**, about 690 lines, AppKit only (plus a tiny one that draws the icon) |
 | 🧩 dependencies | **zero** |
 | 📡 network | **none**. No update checker, no analytics, no "telemetry". Read the source, it's one file |
 | 💻 runs on | Apple Silicon and Intel, macOS 14 Sonoma or newer |
@@ -126,7 +126,7 @@ mv indieshelf.app /Applications/ && open /Applications/indieshelf.app
 
 macOS doesn't complain about apps you built yourself.
 
-**Start at login:** System Settings → General → Login Items → **+** → indieshelf.
+**Start at login:** tick the little **Open at Login** box at the bottom of the shelf.
 
 ## Cheat sheet
 
@@ -142,6 +142,7 @@ macOS doesn't complain about apps you built yourself.
 | right-click | Open, Show in Finder, Remove from Shelf |
 | select + Delete | takes the selected files off the shelf |
 | Clear All | empties the shelf and closes it |
+| Open at Login (bottom of the shelf) | starts indieshelf when you log in |
 | Esc, or click anywhere else | closes the shelf |
 
 ## How it works, for the curious
@@ -169,7 +170,7 @@ sensitive enough for your taste, the thresholds are the first three lines of `Sh
 
 ## Uninstall
 
-Quit it (tray icon → **Quit**) and drag `indieshelf.app` to the Trash. The only other trace is
+Untick **Open at Login**, quit it (**Quit** at the bottom of the shelf), and drag `indieshelf.app` to the Trash. The only other trace is
 `~/Library/Preferences/io.github.tetzgabriel.indieshelf.plist`, the list of what was on your shelf. Delete it too
 for a clean slate.
 
